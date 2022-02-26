@@ -4,10 +4,10 @@ import java.util.List;
 
 public class ExpenseService {
 
-  public static Expense createExpense(double amount, Member paidBy, List<SpendFor> spendFor) {
+  public static Expense createExpense(Integer amount, Member paidBy, List<SpendFor> spendFor) {
 
     int totalSplits = spendFor.size();
-    double splitAmount = ((double) Math.round(amount * 100 / totalSplits)) / 100.0;
+    Integer splitAmount = amount / spendFor.size();
     for (SpendFor split : spendFor) {
       split.setAmount(splitAmount);
     }

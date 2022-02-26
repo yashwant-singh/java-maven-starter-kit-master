@@ -5,11 +5,11 @@ import java.util.List;
 public abstract class Expense {
 
   private String id;
-  private double amount;
+  private Integer amount;
   private Member paidBy;
   private List<SpendFor> spendFor;
 
-  public Expense(double amount, Member paidBy, List<SpendFor> spendFor) {
+  public Expense(int amount, Member paidBy, List<SpendFor> spendFor) {
     this.amount = amount;
     this.paidBy = paidBy;
     this.spendFor = spendFor;
@@ -23,11 +23,11 @@ public abstract class Expense {
     this.id = id;
   }
 
-  public double getAmount() {
+  public Integer getAmount() {
     return amount;
   }
 
-  public void setAmount(double amount) {
+  public void setAmount(Integer amount) {
     this.amount = amount;
   }
 

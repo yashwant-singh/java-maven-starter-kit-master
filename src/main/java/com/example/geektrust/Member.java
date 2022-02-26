@@ -1,5 +1,7 @@
 package com.example.geektrust;
 
+import java.util.Objects;
+
 public class Member {
 
   private final String name;

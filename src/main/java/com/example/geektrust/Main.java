@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,20 +29,41 @@ public class Main {
         List<String> words = Arrays.asList(line.split(" "));
         if (words.contains("MOVE_IN")) {
           expenseManager.addMember(new Member(Integer.toString(count++), words.get(1)));
-        } else if (words.contains("SPEND")) {
+        }
+        if (words.contains("SPEND")) {
           List<SpendFor> spendForList = new ArrayList<>();
-          Map<String, Member> paidFor = new HashMap<>();
-          
-          for (int i = 3; i <= words.size(); i++) {
-            spendForList.add(new SpendForMember(expenseManager.memberMap.get(words.get(i))));
+          boolean isMemberExists = true;
+          for (int i = words.size() - 1; i > 1; i--) {
+            Member member = expenseManager.memberMap.get(words.get(i));
+            if (member != null) {
+              spendForList.add(new SpendForMember(expenseManager.memberMap.get(words.get(i))));
+            } else {
+              isMemberExists = false;
+              System.out.println("MEMBER_NOT_FOUND");
+            }
           }
-          ExpenseService.createExpense(Double.parseDouble(words.get(1)),
-              expenseManager.memberMap.get(words.get(2)), spendForList);
+          if (isMemberExists) {
+            if (spendForList.size() != expenseManager.memberMap.size()) {
+              for (Map.Entry<String, Member> entry : expenseManager.memberMap.entrySet()) {
+                Member member = entry.getValue();
+                if (!words.contains(member.getName())) {
+                  spendForList.add(
+                      new SpendForMember(member));
+                }
+              }
+            }
+            expenseManager.addExpense(Integer.parseInt(words.get(1)), words.get(2), spendForList);
+            System.out.println("SUCCESS");
+          }
+        }
+        if (words.contains("DUES")) {
+          expenseManager.showBalance(words.get(1));
         }
         line = br.readLine();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+    // expenseManager.showBalances();
   }
 }

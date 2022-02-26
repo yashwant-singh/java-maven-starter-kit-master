@@ -2,7 +2,7 @@ package com.example.geektrust;
 
 public abstract class SpendFor {
 
-  double amount;
+  Integer amount;
   private Member user;
 
   public SpendFor(Member user) {
@@ -17,11 +17,11 @@ public abstract class SpendFor {
     this.user = user;
   }
 
-  public double getAmount() {
+  public Integer getAmount() {
     return amount;
   }
 
-  public void setAmount(double amount) {
+  public void setAmount(Integer amount) {
     this.amount = amount;
   }
 }
