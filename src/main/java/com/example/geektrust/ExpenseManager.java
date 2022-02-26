@@ -103,4 +103,23 @@ public class ExpenseManager {
     }
     System.out.println("SUCCESS");
   }
+  public void removeMember(String memberName) {
+    for (Map.Entry<String, Integer> userBalance : balanceSheet.get(memberName).entrySet()) {
+      if (userBalance.getValue() != 0) {
+        System.out.println("FAILURE");
+        return;
+      }
+    }
+    memberMap.remove(memberName);
+    balanceSheet.remove(memberName, new HashMap<String, Double>());
+    System.out.println("SUCCESS");
+  }
+
+  public Map<String, Member> getMemberMap() {
+    return memberMap;
+  }
+
+  public Map<String, Map<String, Integer>> getBalanceSheet() {
+    return balanceSheet;
+  }
 }
