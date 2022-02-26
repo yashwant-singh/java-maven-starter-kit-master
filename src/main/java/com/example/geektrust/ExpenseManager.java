@@ -41,6 +41,23 @@ public class ExpenseManager {
       }
       balances.put(paidBy, balances.get(paidBy) + spendFor.getAmount());
     }
+    if(spendForList.size() == 1) {
+      adjustAmount(paidBy, spendForList.get(0).getUser().getName() );
+    }
+  }
+
+  private void adjustAmount(String paidBy, String paidTo) {
+    Map<String, Integer> paidByBalance = balanceSheet.get(paidBy);
+    Map<String, Integer> paidToBalance = balanceSheet.get(paidTo);
+    String pkey = (String) paidByBalance.keySet().toArray()[0];
+    Integer pValue = paidByBalance.get(pkey);
+    if (paidToBalance.containsKey(pkey)) {
+      Integer val = paidToBalance.get(paidBy);
+        Integer balance = pValue - val;
+        paidToBalance.put(paidBy, paidToBalance.get(paidBy) - val);
+        paidToBalance.put(pkey, paidToBalance.get(pkey) + val);
+        paidByBalance.put(paidBy, balance);
+    }
   }
 
   public void showBalance(String userId) {
