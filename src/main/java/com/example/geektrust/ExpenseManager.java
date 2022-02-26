@@ -32,30 +32,20 @@ public class ExpenseManager {
     System.out.println("SUCCESS");
   }
 
-  public void addExpense(Integer amount, String paidBy, List<SpendFor> spendFor) {
-    Expense expense = ExpenseService.createExpense(amount, memberMap.get(paidBy), spendFor);
-    expenses.add(expense);
-    for (SpendFor split : expense.getSpendFor()) {
-      String paidTo = split.getUser().getName();
-      Map<String, Integer> balances = balanceSheet.get(paidBy);
-      if (!balances.containsKey(paidTo)) {
-        balances.put(paidTo, 0);
-      }
-      balances.put(paidTo, balances.get(paidTo) + split.getAmount());
-
-      balances = balanceSheet.get(paidTo);
+  public void addExpense(Integer amount, String paidBy, List<SpendFor> spendForList) {
+    Expense expense = ExpenseService.createExpense(amount, memberMap.get(paidBy), spendForList);
+    for (SpendFor spendFor : expense.getSpendFor()) {
+      Map<String, Integer> balances = balanceSheet.get(spendFor.getUser().getName());
       if (!balances.containsKey(paidBy)) {
         balances.put(paidBy, 0);
       }
-      balances.put(paidBy, split.getAmount() - balances.get(paidBy));
+      balances.put(paidBy, balances.get(paidBy) + spendFor.getAmount());
     }
   }
 
   public void showBalance(String userId) {
-    boolean isEmpty = true;
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(userId).entrySet()) {
       if (userBalance.getValue() != 0) {
-        isEmpty = false;
         printBalance(userId, userBalance.getKey(), userBalance.getValue());
       }
     }
@@ -121,5 +111,18 @@ public class ExpenseManager {
 
   public Map<String, Map<String, Integer>> getBalanceSheet() {
     return balanceSheet;
+  }
+
+  private void adjustment(String paidBy, List<SpendFor> spendForList) {
+    Map<String, Integer> balances = balanceSheet.get(paidBy);
+    /*SpendFor sp = (SpendFor) spendForList.stream().filter(spendFor -> !spendFor.getUser().getName().equals(paidBy));
+    for (Map.Entry<String, Member> memberEntry : memberMap.entrySet()) {
+      if(!(memberEntry.getKey().equals(paidBy) || memberEntry.getKey().equals(sp.getUser().getName()))) {
+        Integer xPersonValue = balances.get(memberEntry.getKey());
+        Integer sharedAmt = sp.getAmount();
+        Integer remAmt = xPersonValue - sharedAmt;
+          balances.put(sp.getUser().getName(), remAmt);
+      }
+    }*/
   }
 }

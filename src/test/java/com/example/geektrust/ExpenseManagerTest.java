@@ -2,6 +2,7 @@ package com.example.geektrust;
 
 import java.util.HashMap;
 import java.util.Map;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,29 +23,6 @@ public class ExpenseManagerTest {
 
 	}
 
-	@Test
-	public void showDues() {
-
-		ExpenseManager manager = new ExpenseManager();
-
-		manager.showBalance("ANDY");
-		Map<String, Integer> map = new HashMap<>();
-		map.put("ANDY", 1000);
-
-		Assertions.assertEquals(false, manager.getBalanceSheet().containsKey("ANDY"));
-
-	}
-
-	@Test
-	public void clearDues() {
-
-		ExpenseManager manager = new ExpenseManager();
-
-		manager.clearDues("ANDY", "BO", 1000);
-
-		Assertions.assertEquals(1, manager.getMemberMap().size());
-
-	}
 
 	@Test
 	public void addMember() {
@@ -53,7 +31,7 @@ public class ExpenseManagerTest {
 
 		manager.addMember(new Member("1", "ANDY"));
 
-		Assertions.assertEquals("2", manager.getMemberMap().size());
+		Assertions.assertEquals(1, manager.getMemberMap().size());
 
 	}
 

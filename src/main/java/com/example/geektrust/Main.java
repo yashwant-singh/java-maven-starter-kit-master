@@ -1,7 +1,6 @@
 package com.example.geektrust;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,18 +10,16 @@ import java.util.Map;
 
 public class Main {
 
-  static final String FILE_NAME = "input1.txt";
-  static final String PARENT_FOLDER = "sample_input";
 
   public static void main(String[] args) {
     ExpenseManager expenseManager = new ExpenseManager();
-    readInput(expenseManager, FILE_NAME);
+    String filePath = "sample_input/input1.txt";//args[0];
+    readInput(expenseManager, filePath);
   }
 
-  private static void readInput(ExpenseManager expenseManager, String fileName) {
+  private static void readInput(ExpenseManager expenseManager, String filePath) {
 
-    try (BufferedReader br = new BufferedReader(new FileReader(PARENT_FOLDER +
-        File.separator + fileName))) {
+    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
       String line = br.readLine();
       int count = 1;
       while (line != null) {
@@ -33,7 +30,7 @@ public class Main {
         if (words.contains("SPEND")) {
           List<SpendFor> spendForList = new ArrayList<>();
           boolean isMemberExists = true;
-          for (int i = words.size() - 1; i > 1; i--) {
+          for (int i = words.size() - 1; i > 2; i--) {
             Member member = expenseManager.memberMap.get(words.get(i));
             if (member != null) {
               spendForList.add(new SpendForMember(expenseManager.memberMap.get(words.get(i))));
@@ -43,15 +40,6 @@ public class Main {
             }
           }
           if (isMemberExists) {
-            if (spendForList.size() != expenseManager.memberMap.size()) {
-              for (Map.Entry<String, Member> entry : expenseManager.memberMap.entrySet()) {
-                Member member = entry.getValue();
-                if (!words.contains(member.getName())) {
-                  spendForList.add(
-                      new SpendForMember(member));
-                }
-              }
-            }
             expenseManager.addExpense(Integer.parseInt(words.get(1)), words.get(2), spendForList);
             System.out.println("SUCCESS");
           }
