@@ -59,6 +59,12 @@ public class Main {
         if (words.contains("DUES")) {
           expenseManager.showBalance(words.get(1));
         }
+        if(words.contains("CLEAR_DUE")) {
+          expenseManager.clearDues(words.get(1), words.get(2), Integer.parseInt(words.get(3)));
+        }
+        if (words.contains("MOVE_OUT")) {
+          expenseManager.movingOut(words.get(1));
+        }
         line = br.readLine();
       }
     } catch (IOException e) {

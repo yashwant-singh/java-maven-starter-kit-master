@@ -47,7 +47,7 @@ public class ExpenseManager {
       if (!balances.containsKey(paidBy)) {
         balances.put(paidBy, 0);
       }
-      balances.put(paidBy, balances.get(paidBy) - split.getAmount());
+      balances.put(paidBy, split.getAmount() - balances.get(paidBy));
     }
   }
 
@@ -58,10 +58,6 @@ public class ExpenseManager {
         isEmpty = false;
         printBalance(userId, userBalance.getKey(), userBalance.getValue());
       }
-    }
-
-    if (isEmpty) {
-      System.out.println("No balances");
     }
   }
 
@@ -75,10 +71,6 @@ public class ExpenseManager {
         }
       }
     }
-
-    if (isEmpty) {
-      System.out.println("No balances");
-    }
   }
 
   private void printBalance(String user1, String user2, Integer amount) {
@@ -89,5 +81,26 @@ public class ExpenseManager {
     } else if (amount > 0) {
       System.out.println(user2Name + " " + Math.abs(amount));
     }
+  }
+
+  public void clearDues(String paidBy, String paidTo, Integer amount) {
+    Map<String, Integer> balances = balanceSheet.get(paidBy);
+    Integer dues = balances.get(paidTo);
+    if (dues >= amount) {
+      balances.put(paidTo, dues - amount);
+      System.out.println(dues - amount);
+    } else {
+      System.out.println("INCORRECT_PAYMENT");
+    }
+  }
+
+  public void movingOut(String memberName) {
+    for (Map.Entry<String, Integer> userBalance : balanceSheet.get(memberName).entrySet()) {
+      if (userBalance.getValue() != 0) {
+        System.out.println("FAILURE");
+        return;
+      }
+    }
+    System.out.println("SUCCESS");
   }
 }
