@@ -1,9 +1,11 @@
 package com.example.geektrust;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ExpenseManager {
 
@@ -41,32 +43,81 @@ public class ExpenseManager {
       }
       balances.put(paidBy, balances.get(paidBy) + spendFor.getAmount());
     }
-    if(spendForList.size() == 1) {
-      adjustAmount(paidBy, spendForList.get(0).getUser().getName() );
+    if (spendForList.size() == 1) {
+      adjustAmount(paidBy, spendForList.get(0).getUser().getName());
     }
   }
 
   private void adjustAmount(String paidBy, String paidTo) {
-    Map<String, Integer> paidByBalance = balanceSheet.get(paidBy);
-    Map<String, Integer> paidToBalance = balanceSheet.get(paidTo);
-    String pkey = (String) paidByBalance.keySet().toArray()[0];
-    Integer pValue = paidByBalance.get(pkey);
-    if (paidToBalance.containsKey(pkey)) {
-      Integer val = paidToBalance.get(paidBy);
-        Integer balance = pValue - val;
-        paidToBalance.put(paidBy, paidToBalance.get(paidBy) - val);
-        paidToBalance.put(pkey, paidToBalance.get(pkey) + val);
-        paidByBalance.put(paidBy, balance);
+    Map<String, Integer> paidByDue = balanceSheet.get(paidBy);
+    Map<String, Integer> paidToDue = balanceSheet.get(paidTo);
+    String paidBykey = (String) paidByDue.keySet().toArray()[0];
+    Integer paidByValue = paidByDue.get(paidBykey);
+    if (paidToDue.containsKey(paidBykey)) {
+      Integer val = paidToDue.get(paidBy);
+      Integer balance = paidByValue - val;
+      if (Math.signum(balance) == -1) {
+        paidToDue.put(paidBy, paidToDue.get(paidBy) - val - balance);
+        paidToDue.put(paidBykey, paidToDue.get(paidBykey) + val + balance);
+        paidByDue.put(paidBykey, 0);
+      } else {
+        paidToDue.put(paidBy, paidToDue.get(paidBy) - val);
+        paidToDue.put(paidBykey, paidToDue.get(paidBykey) + val);
+        paidByDue.put(paidBykey, balance);
+      }
     }
   }
 
   public void showBalance(String userId) {
+    List<String> s = new ArrayList<String>(memberMap.keySet());
+    s.remove(userId);
+    Map<String, Integer> m = balanceSheet.get(userId);
+    if (m == null) {
+      System.out.println("MEMBER_NOT_FOUND");
+      return;
+    }
+    List<Integer> values = new ArrayList<>();
+    Map<Integer, String> mapping = new HashMap<>();
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(userId).entrySet()) {
-      if (userBalance.getValue() != 0) {
-        printBalance(userId, userBalance.getKey(), userBalance.getValue());
+      s.remove(userBalance.getKey());
+      Integer v = userBalance.getValue();
+      values.add(v);
+      mapping.put(v, userBalance.getKey());
+    }
+    if (s.size() == 1) {
+      values.add(0);
+      mapping.put(0, s.get(0));
+    }
+    printMemberDues(values, mapping);
+  }
+
+  private void printMemberDues(List<Integer> values, Map<Integer, String> mapping) {
+    Collections.sort(values, Collections.reverseOrder());
+    int i = 0;
+    while (i < values.size() - 1) {
+      Integer curVal = values.get(i);
+      Integer nextVal = values.get(i + 1);
+      if (curVal == nextVal) {
+        i = i + 2;
+        if (mapping.get(curVal).compareTo(mapping.get(nextVal)) > 0) {
+          System.out.println(mapping.get(nextVal) + "" + nextVal);
+          System.out.println(mapping.get(curVal) + " " + curVal);
+          continue;
+        } else {
+          System.out.println(mapping.get(curVal) + " " + curVal);
+          System.out.println(mapping.get(nextVal) + "" + nextVal);
+        }
+      } else {
+        System.out.println(mapping.get(curVal) + " " + curVal);
+        i++;
       }
     }
+    if (values.size() != i) {
+      Integer curVal = values.get(i);
+      System.out.println(mapping.get(curVal) + " " + curVal);
+    }
   }
+
 
   public void showBalances() {
     boolean isEmpty = true;
@@ -81,19 +132,18 @@ public class ExpenseManager {
   }
 
   private void printBalance(String user1, String user2, Integer amount) {
-    String user1Name = memberMap.get(user1).getName();
     String user2Name = memberMap.get(user2).getName();
-    if (amount < 0) {
-      System.out.println(user1Name + " " + Math.abs(amount));
-    } else if (amount > 0) {
-      System.out.println(user2Name + " " + Math.abs(amount));
-    }
+    System.out.println(user2Name + " " + Math.abs(amount));
   }
 
   public void clearDues(String paidBy, String paidTo, Integer amount) {
+    if (!(memberMap.containsKey(paidBy) && memberMap.containsKey(paidTo))) {
+      System.out.println("MEMBER_NOT_FOUND");
+      return;
+    }
     Map<String, Integer> balances = balanceSheet.get(paidBy);
     Integer dues = balances.get(paidTo);
-    if (dues >= amount) {
+    if (Objects.nonNull(dues) && dues >= amount) {
       balances.put(paidTo, dues - amount);
       System.out.println(dues - amount);
     } else {
@@ -108,8 +158,18 @@ public class ExpenseManager {
         return;
       }
     }
+    for (Map.Entry<String, Member> memberEntry : memberMap.entrySet()) {
+      Map<String, Integer> balance = balanceSheet.get(memberEntry.getKey());
+      if (balance.containsKey(memberName)) {
+        if (balance.get(memberName) > 0) {
+          System.out.println("FAILURE");
+          return;
+        }
+      }
+    }
     System.out.println("SUCCESS");
   }
+
   public void removeMember(String memberName) {
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(memberName).entrySet()) {
       if (userBalance.getValue() != 0) {
@@ -130,16 +190,4 @@ public class ExpenseManager {
     return balanceSheet;
   }
 
-  private void adjustment(String paidBy, List<SpendFor> spendForList) {
-    Map<String, Integer> balances = balanceSheet.get(paidBy);
-    /*SpendFor sp = (SpendFor) spendForList.stream().filter(spendFor -> !spendFor.getUser().getName().equals(paidBy));
-    for (Map.Entry<String, Member> memberEntry : memberMap.entrySet()) {
-      if(!(memberEntry.getKey().equals(paidBy) || memberEntry.getKey().equals(sp.getUser().getName()))) {
-        Integer xPersonValue = balances.get(memberEntry.getKey());
-        Integer sharedAmt = sp.getAmount();
-        Integer remAmt = xPersonValue - sharedAmt;
-          balances.put(sp.getUser().getName(), remAmt);
-      }
-    }*/
-  }
 }

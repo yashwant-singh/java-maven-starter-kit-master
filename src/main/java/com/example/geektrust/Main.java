@@ -6,15 +6,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 public class Main {
 
 
   public static void main(String[] args) {
     ExpenseManager expenseManager = new ExpenseManager();
-    String filePath = "sample_input/input1.txt";//args[0];
-    readInput(expenseManager, filePath);
+    if (args.length > 0) {
+      String filePath = args[0];
+      readInput(expenseManager, filePath);
+    }
   }
 
   private static void readInput(ExpenseManager expenseManager, String filePath) {
@@ -47,7 +49,7 @@ public class Main {
         if (words.contains("DUES")) {
           expenseManager.showBalance(words.get(1));
         }
-        if(words.contains("CLEAR_DUE")) {
+        if (words.contains("CLEAR_DUE")) {
           expenseManager.clearDues(words.get(1), words.get(2), Integer.parseInt(words.get(3)));
         }
         if (words.contains("MOVE_OUT")) {
