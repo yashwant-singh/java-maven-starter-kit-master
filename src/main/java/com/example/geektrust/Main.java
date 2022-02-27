@@ -1,5 +1,9 @@
 package com.example.geektrust;
 
+import com.example.geektrust.bo.Member;
+import com.example.geektrust.bo.SpendFor;
+import com.example.geektrust.expence.ExpenseManager;
+import com.example.geektrust.member.SpendForMember;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,9 +37,9 @@ public class Main {
           List<SpendFor> spendForList = new ArrayList<>();
           boolean isMemberExists = true;
           for (int i = words.size() - 1; i > 2; i--) {
-            Member member = expenseManager.memberMap.get(words.get(i));
+            Member member = expenseManager.getMemberMap().get(words.get(i));
             if (member != null) {
-              spendForList.add(new SpendForMember(expenseManager.memberMap.get(words.get(i))));
+              spendForList.add(new SpendForMember(expenseManager.getMemberMap().get(words.get(i))));
             } else {
               isMemberExists = false;
               System.out.println("MEMBER_NOT_FOUND");
@@ -60,6 +64,5 @@ public class Main {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    // expenseManager.showBalances();
   }
 }

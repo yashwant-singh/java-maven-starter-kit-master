@@ -1,5 +1,8 @@
-package com.example.geektrust;
+package com.example.geektrust.member;
 
+import com.example.geektrust.bo.Expense;
+import com.example.geektrust.bo.SpendFor;
+import com.example.geektrust.bo.Member;
 import java.util.List;
 
 public class MemberExpense extends Expense {

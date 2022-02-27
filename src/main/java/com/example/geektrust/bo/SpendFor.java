@@ -1,9 +1,9 @@
-package com.example.geektrust;
+package com.example.geektrust.bo;
 
 public abstract class SpendFor {
 
   Integer amount;
-  private Member user;
+  private final Member user;
 
   public SpendFor(Member user) {
     this.user = user;
@@ -11,10 +11,6 @@ public abstract class SpendFor {
 
   public Member getUser() {
     return user;
-  }
-
-  public void setUser(Member user) {
-    this.user = user;
   }
 
   public Integer getAmount() {

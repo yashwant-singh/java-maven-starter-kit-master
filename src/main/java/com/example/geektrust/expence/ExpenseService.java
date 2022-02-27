@@ -1,5 +1,9 @@
-package com.example.geektrust;
+package com.example.geektrust.expence;
 
+import com.example.geektrust.bo.SpendFor;
+import com.example.geektrust.bo.Expense;
+import com.example.geektrust.bo.Member;
+import com.example.geektrust.member.MemberExpense;
 import java.util.List;
 
 public class ExpenseService {
@@ -11,7 +15,6 @@ public class ExpenseService {
     for (SpendFor split : spendFor) {
       split.setAmount(splitAmount);
     }
-    // spendFor.get(0).setAmount(splitAmount + (amount - splitAmount * totalSplits));
     return new MemberExpense(amount, paidBy, spendFor);
   }
 }

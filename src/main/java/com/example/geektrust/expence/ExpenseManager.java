@@ -1,5 +1,9 @@
-package com.example.geektrust;
+package com.example.geektrust.expence;
 
+import com.example.geektrust.bo.Expense;
+import com.example.geektrust.bo.SpendFor;
+import com.example.geektrust.expence.ExpenseService;
+import com.example.geektrust.bo.Member;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -115,19 +119,6 @@ public class ExpenseManager {
     if (values.size() != i) {
       Integer curVal = values.get(i);
       System.out.println(mapping.get(curVal) + " " + curVal);
-    }
-  }
-
-
-  public void showBalances() {
-    boolean isEmpty = true;
-    for (Map.Entry<String, Map<String, Integer>> allBalances : balanceSheet.entrySet()) {
-      for (Map.Entry<String, Integer> userBalance : allBalances.getValue().entrySet()) {
-        if (userBalance.getValue() > 0) {
-          isEmpty = false;
-          printBalance(allBalances.getKey(), userBalance.getKey(), userBalance.getValue());
-        }
-      }
     }
   }
 

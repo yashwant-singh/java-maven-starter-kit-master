@@ -1,6 +1,4 @@
-package com.example.geektrust;
-
-import java.util.Objects;
+package com.example.geektrust.bo;
 
 public class Member {
 
@@ -11,15 +9,6 @@ public class Member {
     this.id = id;
     this.name = name;
   }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
   }

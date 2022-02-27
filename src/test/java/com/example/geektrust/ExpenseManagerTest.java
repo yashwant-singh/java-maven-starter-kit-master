@@ -1,5 +1,7 @@
 package com.example.geektrust;
 
+import com.example.geektrust.bo.Member;
+import com.example.geektrust.expence.ExpenseManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
