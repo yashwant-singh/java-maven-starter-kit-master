@@ -6,8 +6,21 @@ import com.example.geektrust.bo.Member;
 import com.example.geektrust.member.MemberExpense;
 import java.util.List;
 
+/**
+ * The type Expense service.
+ *
+ * @author Yashwant
+ */
 public class ExpenseService {
 
+  /**
+   * Create expense expense.
+   *
+   * @param amount   the amount
+   * @param paidBy   the paid by
+   * @param spendFor the spend for
+   * @return the expense
+   */
   public static Expense createExpense(Integer amount, Member paidBy, List<SpendFor> spendFor) {
 
     int totalSplits = spendFor.size() + 1;

@@ -1,6 +1,6 @@
 package com.example.geektrust.expence;
 
-import com.example.geektrust.Util;
+import com.example.geektrust.util.GeneralUtil;
 import com.example.geektrust.bo.DuesSheet;
 import com.example.geektrust.bo.Expense;
 import com.example.geektrust.bo.Member;
@@ -12,13 +12,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Expense manager.
+ *
+ * @author Yashwant
+ */
 public class ExpenseManager {
 
+  /**
+   * The Person allowed in room.
+   */
   final int PERSON_ALLOWED_IN_ROOM = 3;
+  /**
+   * The Expenses.
+   */
   List<Expense> expenses;
+  /**
+   * The Member map.
+   */
   Map<String, Member> memberMap;
+  /**
+   * The Balance sheet.
+   */
   Map<String, Map<String, Integer>> balanceSheet;
 
+  /**
+   * Instantiates a new Expense manager.
+   */
   public ExpenseManager() {
     expenses = new ArrayList<>();
     memberMap = new HashMap<>();
@@ -29,6 +49,11 @@ public class ExpenseManager {
     return memberMap.size() < PERSON_ALLOWED_IN_ROOM;
   }
 
+  /**
+   * Add member.
+   *
+   * @param member the member
+   */
   public void addMember(Member member) {
     if (!validateMember()) {
       System.out.println("HOUSEFUL");
@@ -39,6 +64,13 @@ public class ExpenseManager {
     System.out.println("SUCCESS");
   }
 
+  /**
+   * Add expense.
+   *
+   * @param amount       the amount
+   * @param paidBy       the paid by
+   * @param spendForList the spend for list
+   */
   public void addExpense(Integer amount, String paidBy, List<SpendFor> spendForList) {
     Expense expense = ExpenseService.createExpense(amount, memberMap.get(paidBy), spendForList);
     for (SpendFor spendFor : expense.getSpendFor()) {
@@ -73,7 +105,12 @@ public class ExpenseManager {
     }
   }
 
-  public void showBalance(String userId) {
+  /**
+   * Show balance.
+   *
+   * @param userId the user id
+   */
+  public void memberDues(String userId) {
     List<String> s = new ArrayList<String>(memberMap.keySet());
     s.remove(userId);
     Map<String, Integer> m = balanceSheet.get(userId);
@@ -123,14 +160,16 @@ public class ExpenseManager {
 
   private void print(String name, Integer amt) {
     System.out.println(
-        String.format("%s%s%s", name, Util.SINGLE_SPACE, amt));
+        String.format("%s%s%s", name, GeneralUtil.Const.SINGLE_SPACE, amt));
   }
 
-  private void printBalance(String user1, String user2, Integer amount) {
-    String user2Name = memberMap.get(user2).getName();
-    System.out.println(user2Name + " " + Math.abs(amount));
-  }
-
+  /**
+   * Clear dues.
+   *
+   * @param paidBy the paid by
+   * @param paidTo the paid to
+   * @param amount the amount
+   */
   public void clearDues(String paidBy, String paidTo, Integer amount) {
     if (!(memberMap.containsKey(paidBy) && memberMap.containsKey(paidTo))) {
       System.out.println("MEMBER_NOT_FOUND");
@@ -146,6 +185,11 @@ public class ExpenseManager {
     }
   }
 
+  /**
+   * Moving out.
+   *
+   * @param memberName the member name
+   */
   public void movingOut(String memberName) {
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(memberName).entrySet()) {
       if (userBalance.getValue() != 0) {
@@ -165,6 +209,11 @@ public class ExpenseManager {
     System.out.println("SUCCESS");
   }
 
+  /**
+   * Remove member.
+   *
+   * @param memberName the member name
+   */
   public void removeMember(String memberName) {
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(memberName).entrySet()) {
       if (userBalance.getValue() != 0) {
@@ -177,10 +226,20 @@ public class ExpenseManager {
     System.out.println("SUCCESS");
   }
 
+  /**
+   * Gets member map.
+   *
+   * @return the member map
+   */
   public Map<String, Member> getMemberMap() {
     return memberMap;
   }
 
+  /**
+   * Gets balance sheet.
+   *
+   * @return the balance sheet
+   */
   public Map<String, Map<String, Integer>> getBalanceSheet() {
     return balanceSheet;
   }
