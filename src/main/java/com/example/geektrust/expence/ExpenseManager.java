@@ -1,9 +1,10 @@
 package com.example.geektrust.expence;
 
+import com.example.geektrust.Util;
+import com.example.geektrust.bo.DuesSheet;
 import com.example.geektrust.bo.Expense;
-import com.example.geektrust.bo.SpendFor;
-import com.example.geektrust.expence.ExpenseService;
 import com.example.geektrust.bo.Member;
+import com.example.geektrust.bo.SpendFor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -80,46 +81,49 @@ public class ExpenseManager {
       System.out.println("MEMBER_NOT_FOUND");
       return;
     }
-    List<Integer> values = new ArrayList<>();
-    Map<Integer, String> mapping = new HashMap<>();
+    List<DuesSheet> values = new ArrayList<>();
     for (Map.Entry<String, Integer> userBalance : balanceSheet.get(userId).entrySet()) {
       s.remove(userBalance.getKey());
       Integer v = userBalance.getValue();
-      values.add(v);
-      mapping.put(v, userBalance.getKey());
+      values.add(new DuesSheet(v, userBalance.getKey()));
     }
     if (s.size() == 1) {
-      values.add(0);
-      mapping.put(0, s.get(0));
+      values.add(new DuesSheet(0, s.get(0)));
     }
-    printMemberDues(values, mapping);
+    printMemberDues(values);
   }
 
-  private void printMemberDues(List<Integer> values, Map<Integer, String> mapping) {
+  private void printMemberDues(List<DuesSheet> values) {
+    String msg = "%s%s%s";
     Collections.sort(values, Collections.reverseOrder());
     int i = 0;
     while (i < values.size() - 1) {
-      Integer curVal = values.get(i);
-      Integer nextVal = values.get(i + 1);
-      if (curVal == nextVal) {
+      DuesSheet curVal = values.get(i);
+      DuesSheet nextVal = values.get(i + 1);
+      if (curVal.getAmount().equals(nextVal.getAmount())) {
         i = i + 2;
-        if (mapping.get(curVal).compareTo(mapping.get(nextVal)) > 0) {
-          System.out.println(mapping.get(nextVal) + "" + nextVal);
-          System.out.println(mapping.get(curVal) + " " + curVal);
+        if (curVal.getName().compareTo(nextVal.getName()) > 0) {
+          print(nextVal.getName(), nextVal.getAmount());
+          print(curVal.getName(), curVal.getAmount());
           continue;
         } else {
-          System.out.println(mapping.get(curVal) + " " + curVal);
-          System.out.println(mapping.get(nextVal) + "" + nextVal);
+          print(curVal.getName(), curVal.getAmount());
+          print(nextVal.getName(), nextVal.getAmount());
         }
       } else {
-        System.out.println(mapping.get(curVal) + " " + curVal);
+        print(curVal.getName(), curVal.getAmount());
         i++;
       }
     }
     if (values.size() != i) {
-      Integer curVal = values.get(i);
-      System.out.println(mapping.get(curVal) + " " + curVal);
+      DuesSheet curVal = values.get(i);
+      System.out.println(curVal.getName() + " " + curVal.getAmount());
     }
+  }
+
+  private void print(String name, Integer amt) {
+    System.out.println(
+        String.format("%s%s%s", name, Util.SINGLE_SPACE, amt));
   }
 
   private void printBalance(String user1, String user2, Integer amount) {
