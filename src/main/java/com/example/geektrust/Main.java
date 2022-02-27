@@ -1,13 +1,10 @@
 package com.example.geektrust;
 
 import com.example.geektrust.bo.Member;
-import com.example.geektrust.bo.SpendFor;
 import com.example.geektrust.expence.ExpenseManager;
-import com.example.geektrust.member.SpendForMember;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,21 +31,7 @@ public class Main {
           expenseManager.addMember(new Member(Integer.toString(count++), words.get(1)));
         }
         if (words.contains("SPEND")) {
-          List<SpendFor> spendForList = new ArrayList<>();
-          boolean isMemberExists = true;
-          for (int i = words.size() - 1; i > 2; i--) {
-            Member member = expenseManager.getMemberMap().get(words.get(i));
-            if (member != null) {
-              spendForList.add(new SpendForMember(expenseManager.getMemberMap().get(words.get(i))));
-            } else {
-              isMemberExists = false;
-              System.out.println("MEMBER_NOT_FOUND");
-            }
-          }
-          if (isMemberExists) {
-            expenseManager.addExpense(Integer.parseInt(words.get(1)), words.get(2), spendForList);
-            System.out.println("SUCCESS");
-          }
+          Util.spend(words, expenseManager);
         }
         if (words.contains("DUES")) {
           expenseManager.showBalance(words.get(1));
