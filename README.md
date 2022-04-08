@@ -32,27 +32,27 @@ Expenses Management
     Problem 1Expenses Management
 
 
-                            All Geektrust challenges are meant to be solved offline. Once you have completed the challenge, you can test and submit your code here. Your score will be determined based on factors such as OOPS, readability, and scalability.
+   All Geektrust challenges are meant to be solved offline. Once you have completed the challenge, you can test and submit your code here. Your score will be determined based on factors such as OOPS, readability, and scalability.
 
-                            You should read what we look for in your solution before you start coding. It is NOT about just getting the right output.
+   You should read what we look for in your solution before you start coding. It is NOT about just getting the right output.
 
-                            Please go through the build instructions here
+   Please go through the build instructions here
                         
 
 
-                            The challenge
+   The challenge
 
-                            You work at a fintech startup that helps housemates calculate and manage their expenses. Your task is to build this expense calculator. 
+   You work at a fintech startup that helps housemates calculate and manage their expenses. Your task is to build this expense calculator. 
 
-                            The housemates stay in a 3 bedroom house where a maximum of 3 people can stay. The expenses calculator can be used only when there are at least 2 people in the house. Once there are at least 2 people in the house, then the expenses are tracked in the software you build. Once their expenses are tracked, a member of the house can only move out of the house if they have cleared the dues.
+   The housemates stay in a 3 bedroom house where a maximum of 3 people can stay. The expenses calculator can be used only when there are at least 2 people in the house. Once there are at least 2 people in the house, then the expenses are tracked in the software you build. Once their expenses are tracked, a member of the house can only move out of the house if they have cleared the dues.
                         
 
 
-                            Input Commands
+   Input Commands
 
-                            MOVE_IN <name-of-the-member>
+   MOVE_IN <name-of-the-member>
 
-                            This command allows a member to be moved into the house. It outputs SUCCESS if the addition is successful. If the house is already full with the maximum number of members, then it should print an error message HOUSEFUL.
+   This command allows a member to be moved into the house. It outputs SUCCESS if the addition is successful. If the house is already full with the maximum number of members, then it should print an error message HOUSEFUL.
                             
                             Example- 
 
